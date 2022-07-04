@@ -1,42 +1,46 @@
 package com.example.anagram
 
-import androidx.appcompat.app.AppCompatActivity
+
+import android.graphics.Color
 import android.os.Bundle
+import android.widget.TextView
+import android.widget.*
+import androidx.appcompat.app.AppCompatActivity
 import com.example.anagram.databinding.ActivityMainBinding
-import java.util.*
 
-val mapOfWords = mutableMapOf<String,String>()
 
-class MainActivity : AppCompatActivity() {
-    private lateinit var binding: ActivityMainBinding
+open class MainActivity : AppCompatActivity() {
+    lateinit var binding: ActivityMainBinding
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
 
-
-        binding.btnSave.setOnClickListener {
-            var annagram = binding.etEnterAnagram.text.toString()
-            sortArrayAndDisplayCount(annagram)
-        }
-
-        binding.btnUpdate.setOnClickListener {
-
-            val userInput = binding.etEnterAnagram.text.toString() // შეუცვლელი
-            var str = userInput
-            str = str.split("").sorted().joinToString("") // სორტირებული
-
-            if (mapOfWords.containsValue(str)){
-                binding.tvAnagramCount.text = "$userInput უკვე არსებობს"
-            }
+        binding.button.setOnClickListener {
+            addEditText()
         }
     }
 
-    fun sortArrayAndDisplayCount (annagram:String){
-        var str = annagram
-        str = str.split("").sorted().joinToString("")
-        mapOfWords[annagram] = str
-        binding.tvAnagramCount.text = mapOfWords.size.toString()
+    private fun addEditText(){
+        val edittext = EditText(this)
+
+        if (binding.checkbox.isChecked.not()) {
+            edittext.setTextColor(Color.RED)
+            edittext.hint = "unchecked"
+            binding.mainView.removeView(edittext)
+            binding.mainView.addView(edittext,binding.mainView.childCount  - 1)
+            edittext.textSize = 20f
+        }
+        else if(binding.checkbox.isChecked)
+            edittext.setTextColor(Color.BLUE)
+            edittext.hint = "checked"
+            binding.mainView.removeView(edittext)
+            binding.mainView.addView(edittext,binding.mainView.childCount  - 1)
+            edittext.textSize = 20f
     }
+
 }
+
+
+
